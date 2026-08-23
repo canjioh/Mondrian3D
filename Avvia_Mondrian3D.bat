@@ -11,4 +11,4 @@ echo   (chiudi la finestra del server per fermare l'app)
 echo.
 start "Mondrian3D server" cmd /c "python -m http.server 8000"
 timeout /t 1 >nul
-start "" "http://localhost:8000/mondrian3d.html"
+start "" "http://localhost:8000/"
