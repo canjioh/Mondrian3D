@@ -57,6 +57,15 @@
   #panelToggle{right:12px} #langBtn{right:112px}
   #panelToggle:hover,#langBtn:hover{border-color:var(--accent)}
   a#dl{display:none}
+  /* ---- MOBILE: immagine in alto, comandi in basso (a tendina, chiudibili) ---- */
+  @media (max-width:760px){
+    #app{flex-direction:column;}
+    #stage{flex:1 1 auto; min-height:50vh;}
+    #panel{width:auto; max-height:46vh; overflow-y:auto; border-left:none; border-top:1px solid var(--line);}
+    #editCanvas{width:min(94vw,44vh); height:min(94vw,44vh);}
+    #panelToggle{top:auto; bottom:10px; right:10px;}
+    #langBtn{top:auto; bottom:10px; right:120px;}
+  }
 </style>
 </head>
 <body>
@@ -565,7 +574,8 @@ function resize(){
   const w=stage.clientWidth,h=stage.clientHeight;
   renderer.setSize(w,h,false);
   const a=w/Math.max(1,h);
-  camera.left=-a*VS;camera.right=a*VS;camera.top=VS;camera.bottom=-VS;
+  let vs=VS; const need=S*0.62; if(a*vs<need) vs=need/a;   // schermi stretti (mobile): allarga per non tagliare
+  camera.left=-a*vs;camera.right=a*vs;camera.top=vs;camera.bottom=-vs;
   camera.updateProjectionMatrix();
 }
 window.addEventListener('resize',resize);resize();
