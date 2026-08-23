@@ -98,13 +98,17 @@
         </div>
         <label style="margin-top:8px">Apertura / profondita' <span class="val" id="vGap"></span></label>
         <input type="range" id="gap" min="6" max="100" value="55">
-        <label>Rotazione dei livelli (gradi) <span class="val" id="vSpin"></span></label>
-        <input type="range" id="spin" min="0" max="120" value="0">
-        <label>Allontanamento laterale <span class="val" id="vSpread"></span></label>
-        <input type="range" id="spread" min="0" max="100" value="0">
+        <div id="ctlSpin">
+          <label>Rotazione dei livelli (gradi) <span class="val" id="vSpin"></span></label>
+          <input type="range" id="spin" min="0" max="120" value="0">
+        </div>
+        <div id="ctlSpread">
+          <label>Allontanamento laterale <span class="val" id="vSpread"></span></label>
+          <input type="range" id="spread" min="0" max="100" value="0">
+        </div>
         <label style="margin-top:10px"><input type="checkbox" id="hideWhite"> Nascondi il bianco (lo da' lo sfondo)</label>
-        <label><input type="checkbox" id="backGrid" checked> Griglia nera anche sul retro</label>
-        <label><input type="checkbox" id="closedPoly" checked> Diamante: poliedro chiuso</label>
+        <label id="ctlBackGrid"><input type="checkbox" id="backGrid" checked> Griglia nera anche sul retro</label>
+        <label id="ctlClosed"><input type="checkbox" id="closedPoly" checked> Poliedro chiuso</label>
         <div class="hint">Fogli = lastre staccate in profondita'. Piani = piani inclinati
           che si compenetrano (fronte = Mondrian). Diamante = cristallo convesso;
           i bordi delle facce compaiono solo ruotando.</div>
@@ -516,8 +520,17 @@ $('closedPoly').addEventListener('change',buildScene);
 $('decoSeg').querySelectorAll('button').forEach(b=>{
   b.onclick=()=>{deco=b.dataset.d;
     $('decoSeg').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');buildScene();};
+    b.classList.add('on');updateControls();buildScene();};
 });
+// mostra solo i controlli pertinenti alla modalita' attiva
+function updateControls(){
+  const d=deco;
+  $('ctlSpin').style.display   = d==='sheets' ? '' : 'none';   // rotazione livelli: solo Fogli
+  $('ctlSpread').style.display = d==='sheets' ? '' : 'none';   // allontanamento: solo Fogli
+  $('ctlBackGrid').style.display = (d==='sheets'||d==='planes') ? '' : 'none'; // retro: Fogli/Piani
+  $('ctlClosed').style.display = d==='diamond' ? '' : 'none';  // poliedro chiuso: solo Diamante
+}
+updateControls();
 fmt();
 
 // asse
@@ -945,7 +958,7 @@ const EN={
 "Modalita'":"Mode","Decostruzione":"Deconstruction","Fogli":"Sheets","Piani":"Planes","Diamante":"Diamond",
 "Apertura / profondita'":"Spread / depth","Rotazione dei livelli (gradi)":"Layer rotation (deg)",
 "Allontanamento laterale":"Lateral spread","Nascondi il bianco (lo da' lo sfondo)":"Hide white (from background)",
-"Griglia nera anche sul retro":"Black grid also on back","Diamante: poliedro chiuso":"Diamond: closed polyhedron",
+"Griglia nera anche sul retro":"Black grid also on back","Poliedro chiuso":"Closed polyhedron",
 "Movimento":"Movement","Velocita' rotazione":"Rotation speed",
 "Angolo max auto-rotazione (gradi, 0 = continuo)":"Max auto-rotation angle (deg, 0 = continuous)",
 "Auto-rotazione":"Auto-rotate","Ferma rotazione":"Stop rotation","Spirale telecamera":"Camera spiral",
